@@ -1,0 +1,61 @@
+HAFT ALMAS - HOW TO RUN
+=======================
+
+Requirements
+  - Windows with Python 3.5 or newer (python.org installer, keep "tcl/tk and IDLE" ticked).
+  - Nothing else. No pip packages are needed.
+
+Start the program
+  1. Double-click HaftAlmas.vbs  (recommended, also works from a network share such as
+     \\server\share\HaftAlmas).
+     Alternative: double-click run.bat, or run  py -3 main.py  in a console.
+  2. Log in with  admin / admin  (first run only - change the password afterwards with the
+     "Change password" button in the sidebar).
+  3. Two sample lines are registered automatically. Pick a line at the top, or add your own CSV
+     in Line Manager (admin only) and map its columns.
+  4. Date filters accept Jalali (1402/10/25, 1402-10-25, 1402.10.25, Persian digits) or
+     Gregorian (2024-01-15). Internally everything is stored as Gregorian.
+
+Where settings are saved
+  - config.json and users.json are saved next to main.py.
+  - If that folder is read-only (for example a write-protected share), they are saved in
+    %USERPROFILE%\HaftAlmas_data\ instead.
+  - Errors are written to error_log.txt in the same place.
+
+Roles
+  Admin : everything, plus Line Manager, User Manager and editing LSL/USL (Specs / Cp-Cpk).
+  User  : Dashboard, Charts, Compare, Statistics, Data Quality, Specs (view/calculate), Export.
+
+Troubleshooting
+  - "py is not recognized" and "python is not recognized": install Python and tick
+    "Add python.exe to PATH".
+  - The window does not open: read error_log.txt.
+  - A CSV column was renamed: open Line Manager, select the line, fix the mapping, Save.
+
+Handy shortcuts
+  Ctrl+1 .. Ctrl+9  switch pages      F5  reload the CSV from disk
+  Click a table header to sort it.    Hover a chart to see exact values.
+
+Shared installation (network share)
+  - The administrator runs the program once with WRITE access. This creates users.json and
+    config.json next to main.py (users, lines, column mapping, limits).
+  - Normal users need only READ access to the folder. They read those two files from the share
+    and never write to it. Their own data (error log, last selected line) is stored in
+    %USERPROFILE%\HaftAlmas_data.
+  - Normal users cannot change their password on a read-only share; the administrator resets it.
+
+Quality data on steel lines
+  In Line Manager select the line, press "Read columns + auto-map" (or pick the columns by hand):
+  Coil weight, Quality grade, Main cause, Second cause. Set the weight unit (kg or ton) and the
+  prime quality grade(s). Lines without these columns keep working exactly as before.
+
+Quality grades and downgrade (important)
+  In Line Manager type the PRIME quality grades of each line, comma separated, for example
+  "Aaa, AA, a". A coil is "downgraded" only when its quality grade is NOT one of them.
+  A coil with a recorded defect (main/second cause) is counted as "with defect" whatever its grade.
+  If no prime grades are set, a coil with a main defect counts as downgraded.
+  Grade order (best first) and colours can be edited in modules/analytics.py (GRADE_ORDER) and
+  modules/color_pages.py (GRADE_COLORS).
+
+Dates
+  Date filters are Jalali. Type a date (1402/10/25) or press the arrow button for a calendar.
